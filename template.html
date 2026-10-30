@@ -39,37 +39,49 @@
   </div>
 </div>
 
-<a href="http://127.0.0.1:5501/index.html" class="play-button">Play</a>
+<a href="index.html" class="play-button">play</a>
 
 <video class="videobg" autoplay muted loop id="myVideo">
   <source src="bg_video.mp4" type="video/mp4">
 </video>
 
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./supabase.js"></script>
 <script>
-	const form = document.getElementById("profile-form");
-  
-	if (!form) {
-	  alert("Form not found: the <form> tag needs id=\"profile-form\"");
-	} else {
-	  form.addEventListener("submit", function (event) {
-		event.preventDefault();
-  
-		const data = Object.fromEntries(new FormData(form));
-  
-		let submissions = [];
-		try {
-		  submissions = JSON.parse(localStorage.getItem("submissions")) || [];
-		} catch (e) {}
-  
-		submissions.push(data);
-		localStorage.setItem("submissions", JSON.stringify(submissions));
-  
-		form.reset();
-		document.getElementById("confirmation").textContent = "Thanks, your profile was added!";
-	  });
-	}
-  </script>
+  const form = document.getElementById("profile-form");
+
+  form.addEventListener("submit", async function (event) {
+    event.preventDefault();
+
+    const d = Object.fromEntries(new FormData(form));
+    const message = document.getElementById("confirmation");
+
+    const row = {
+      sign: d.sign,
+      age: d.age,
+      activity: d.activity,
+      gender: d.gender,
+      favorite_color: d.favoriteColor,
+      favorite_food: d.favoriteFood,
+      love_language: d.loveLanguage,
+      communication_style: d.communicationStyle,
+      qualities: d.qualities,
+      flaws: d.flaws,
+      physical: d.physical,
+    };
+
+    message.textContent = "Sending...";
+    const { error } = await db.from("submissions").insert(row);
+
+    if (error) {
+      console.error(error);
+      message.textContent = "Something went wrong: " + error.message;
+    } else {
+      form.reset();
+      message.textContent = "Thanks, your profile was added!";
+    }
+  });
+</script>
+
 </body>
-<!-- in template.html -->
-<a href="index.html" class="play-button"> play </a>
 </html>
