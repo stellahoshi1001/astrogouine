@@ -2,10 +2,10 @@ const FIELDS = [
   ["age", "Age"],
   ["activity", "Activity"],
   ["gender", "Gender"],
-  ["favoriteColor", "Favorite color"],
-  ["favoriteFood", "Favorite food"],
-  ["loveLanguage", "Love Language"],
-  ["communicationStyle", "Communication style"],
+  ["favorite_color", "Favorite color"],
+  ["favorite_food", "Favorite food"],
+  ["love_language", "Love Language"],
+  ["communication_style", "Communication style"],
   ["qualities", "Qualities"],
   ["flaws", "Flaws"],
   ["physical", "Physical attributes"],
@@ -15,19 +15,25 @@ const submissionBox = document.getElementById("submission");
 const resultText = document.getElementById("result");
 const nextButton = document.getElementById("next");
 
+let all = [];
 let current = null;
 let answered = false;
 
-function loadSubmissions() {
-  try {
-    return JSON.parse(localStorage.getItem("submissions")) || [];
-  } catch (e) {
-    return [];
+async function loadSubmissions() {
+  resultText.textContent = "Loading...";
+  const { data, error } = await db.from("submissions").select("*");
+
+  if (error) {
+    console.error(error);
+    resultText.textContent = "Could not load submissions: " + error.message;
+    return;
   }
+
+  all = data;
+  showRandomSubmission();
 }
 
 function showRandomSubmission() {
-  const all = loadSubmissions();
   submissionBox.innerHTML = "";
   resultText.textContent = "";
   nextButton.hidden = true;
@@ -43,7 +49,7 @@ function showRandomSubmission() {
 
   FIELDS.forEach(([key, label]) => {
     const p = document.createElement("p");
-    p.textContent = `${label}: ${current[key]}`;
+    p.textContent = label + ": " + current[key];
     submissionBox.appendChild(p);
   });
 }
@@ -64,4 +70,4 @@ document.querySelectorAll(".astro-button[id]").forEach((button) => {
 
 nextButton.addEventListener("click", showRandomSubmission);
 
-showRandomSubmission();
+loadSubmissions();
