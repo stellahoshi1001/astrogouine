@@ -7,7 +7,17 @@ html, body {
 	height: 100vh;
 	background: transparent;
 	
-	  
+	  /* Style the video: 100% width and height to cover the entire window */
+#myVideo {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    z-index: -1;
+	pointer-events: none;
+}
 }
 
 * {
@@ -34,7 +44,7 @@ main {
 .questionnaire .outer-box {
 	height: 100%;
 	width: 60%;
-	background-color: #efeaea;
+	background-color: #8C181A;
 	margin-left: auto;
 	margin-right: auto;
 	display: flex;
@@ -91,7 +101,7 @@ main {
 p { 
 	font-family: 'Courier New', Courier, monospace;
 	margin-left: 20px;
-	color: #8C181A;
+	color: #ffffff;
 }
 
 .fun {
@@ -161,7 +171,7 @@ p {
 .questionnaire label {
 	display: block;
 	font-family: 'Courier New', Courier, monospace;
-	color: #8C181A;
+	color: #ffffff;
 	margin: 10px 20px;
 }
 
